@@ -109,37 +109,39 @@ const internQ = [
     }
 ]
 
+// Function to run Engineer questions
 function runEngineer() {
     inquirer
         .prompt(
             engineerQ
         )
         .then(function(response) {
+            response.role = "Engineer";
             employees.push(response);
-            console.log(employees);
             nextRole();
     })
 }
 
+// Function to run Intern questions
 function runIntern() {
     inquirer
         .prompt(
             internQ
         )
         .then(function(response) {
+            response.role = "Intern";
             employees.push(response);
-            console.log(employees);
             nextRole();
     })
 }
 
+// Function to prompt multiple choice question about which employee to add next or to finish list
 function nextRole() {
     inquirer
         .prompt(
             question
         )
         .then(function(response) {
-            console.log(response);
             if (response.role === "Engineer") {
                 runEngineer();
             }
@@ -153,14 +155,15 @@ function nextRole() {
     })
 }
 
+// Function to begin inquirer prompts when user activates application
 inquirer
     .prompt(
         startQ
     )
     .then(function(response) {
         console.log(response);
+            response.role = "Manager";
             employees.push(response);
-            console.log(employees);
             nextRole();
     })
 
