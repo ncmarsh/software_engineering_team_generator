@@ -14,12 +14,8 @@ const { run } = require("jest");
 // Array of employees to add to
 const employees = [];
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
-
 // Initial questions to prompt the user
 const startQ = [
-    // different question path for the different people
     // error if id number is already taken
     {
         prefix: "Let's build your team:",
@@ -47,6 +43,7 @@ const startQ = [
     }
 ]
 
+// Transition question
 const question = [
     {
         type: "list",
@@ -57,12 +54,10 @@ const question = [
             "Intern",
             "I don't want to add any more team members."
         ],
-        // when: function(end) {
-        //     return end.choices === "I don't want to add any more team members.";
-        // }
     }
 ]
 
+// Array of engineer questions
 const engineerQ = [
     {
         type: "input",
@@ -86,6 +81,7 @@ const engineerQ = [
     }
 ]
 
+// Array of intern questions
 const internQ = [
     {
         type: "input",
@@ -116,8 +112,8 @@ function runEngineer() {
             engineerQ
         )
         .then(function(response) {
-            response.role = "Engineer";
-            employees.push(response);
+            let newEngineer = new Engineer(response.name, response.id, response.email, response.github);
+            employees.push(newEngineer);
             nextRole();
     })
 }
@@ -129,8 +125,8 @@ function runIntern() {
             internQ
         )
         .then(function(response) {
-            response.role = "Intern";
-            employees.push(response);
+            let newIntern = new Intern(response.name, response.id, response.email, response.school);
+            employees.push(newIntern);
             nextRole();
     })
 }
@@ -151,8 +147,19 @@ function nextRole() {
             else {
                 console.log("That's all folks");
                 console.log(employees);
+                // writeToFile(employees);
             }
     })
+}
+
+// Function to write to html file
+function writeToFile(data) {
+    fs.writeFile(outputPath, render(data), function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("Success!");
+    } )
 }
 
 // Function to begin inquirer prompts when user activates application
@@ -162,8 +169,10 @@ inquirer
     )
     .then(function(response) {
         console.log(response);
-            response.role = "Manager";
-            employees.push(response);
+            // response.role = "Manager";
+            let newManager = new Manager(response.name, response.id, response.email, response.officeNumber);
+            // console.log(newEmployee);
+            employees.push(newManager);
             nextRole();
     })
 
