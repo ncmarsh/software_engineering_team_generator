@@ -4,6 +4,7 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const mkdirp = require("mkdirp");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
@@ -16,7 +17,7 @@ const employees = [];
 
 // Initial questions to prompt the user
 const startQ = [
-    // error if id number is already taken
+    // error if id number is already taken/ email in correct format
     {
         prefix: "Let's build your team:",
         type: "input",
@@ -147,19 +148,25 @@ function nextRole() {
             else {
                 console.log("That's all folks");
                 console.log(employees);
-                // writeToFile(employees);
+                createHTMLFile(employees);
             }
     })
 }
 
 // Function to write to html file
-function writeToFile(data) {
+function createHTMLFile(data) {     
+    mkdirp(OUTPUT_DIR, function(err) {
+        if (err) {
+            return console.log(err);
+        }
+    })
+
     fs.writeFile(outputPath, render(data), function(err) {
         if (err) {
             return console.log(err);
         }
         console.log("Success!");
-    } )
+    })
 }
 
 // Function to begin inquirer prompts when user activates application
@@ -168,12 +175,9 @@ inquirer
         startQ
     )
     .then(function(response) {
-        console.log(response);
-            // response.role = "Manager";
-            let newManager = new Manager(response.name, response.id, response.email, response.officeNumber);
-            // console.log(newEmployee);
-            employees.push(newManager);
-            nextRole();
+        let newManager = new Manager(response.name, response.id, response.email, response.officeNumber);
+        employees.push(newManager);
+        nextRole();
     })
 
 // After the user has input all employees desired, call the `render` function (required
@@ -195,5 +199,3 @@ inquirer
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
-
-// Call the render function with the array of employees
