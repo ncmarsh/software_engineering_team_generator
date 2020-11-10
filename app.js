@@ -15,32 +15,70 @@ const { run } = require("jest");
 // Array of employees to add to
 const employees = [];
 
+// Validation functions for user input
+// Generic validation to make sure the input isn't blank
+const checkIfEmpty = function(name) {
+    if (name === "") {
+        return "Oh no, this field is blank. Please enter valid information.";
+    } else {
+        return true;
+    }
+}
+
+// Check to see if input is blank and if id already exists
+const checkIds = function(id) {
+    if (id === "") {
+        return "Oh no, this field is blank. Please enter a valid id.";
+    }
+
+    for (let i = 0; i < employees.length; i++) {
+        let idExists = employees[i].id;
+        if (id === idExists) {
+            return "This id belongs to another employee. Please enter a valid id.";
+        } else {
+            return true;
+        }
+    }
+}
+
+// Check to see if input is blank and if email is in the correct format
+const checkEmail = function(email) {
+    if (email === "") {
+        return "Oh no, this field is blank. Please enter a valid email address.";
+    } else if (email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+        return true;
+    } else {
+        return "Please enter a valid email address.";
+    }
+}
+
+// Inquirer questions
 // Initial questions to prompt the user
 const startQ = [
-    // error if id number is already taken/ email in correct format
     {
         prefix: "Let's build your team:",
         type: "input",
         message: "\nWhat is your manager's name?",
-        name: "name"
+        name: "name",
+        validate: checkIfEmpty,
     },
     {
         type: "input",
         message: "What is your manager's id?",
         name: "id",
-        // validate: function validateId(id) {
-        //     return id !== "";
-        // }
+        validate: checkIfEmpty,
     },
     {
         type: "input",
         message: "What is your manager's email?",
-        name: "email"
+        name: "email",
+        validate: checkEmail,
     },
     {
         type: "input",
         message: "What is your manager's office number?",
-        name: "officeNumber"
+        name: "officeNumber",
+        validate: checkIfEmpty,
     }
 ]
 
@@ -63,22 +101,26 @@ const engineerQ = [
     {
         type: "input",
         message: "What is your engineer's name?",
-        name: "name"
+        name: "name",
+        validate: checkIfEmpty,
     },
     {
         type: "input",
         message: "What is your engineer's id?",
-        name: "id"
+        name: "id",
+        validate: checkIds,
     },
     {
         type: "input",
         message: "What is your engineer's email?",
-        name: "email"
+        name: "email",
+        validate: checkEmail,
     },
     {
         type: "input",
         message: "What is your engineer's GitHub username?",
-        name: "github"
+        name: "github",
+        validate: checkIfEmpty,
     }
 ]
 
@@ -87,22 +129,26 @@ const internQ = [
     {
         type: "input",
         message: "What is your intern's name?",
-        name: "name"
+        name: "name",
+        validate: checkIfEmpty,
     },
     {
         type: "input",
         message: "What is your intern's id?",
-        name: "id"
+        name: "id",
+        validate: checkIds,
     },
     {
         type: "input",
         message: "What is your intern's email?",
-        name: "email"
+        name: "email",
+        validate: checkEmail,
     },
     {
         type: "input",
         message: "What is your intern's school?",
-        name: "school"
+        name: "school",
+        validate: checkIfEmpty,
     }
 ]
 
@@ -169,6 +215,31 @@ function createHTMLFile(data) {
     })
 }
 
+// Alternate function to write html file
+// function createHTMLFile(data) {
+//     if (fs.existsSync(OUTPUT_DIR)) {
+//         fs.writeFile(outputPath, render(data), function(err) {
+//             if (err) {
+//                 return console.log(err);
+//             }
+//             console.log("Success!");
+//         })
+//     } else {
+//         fs.mkdir(OUTPUT_DIR, function(err) {
+//             if (err) {
+//                 return console.log(err);
+//             }
+//         })
+    
+//         fs.writeFile(outputPath, render(data), function(err) {
+//             if (err) {
+//                 return console.log(err);
+//             }
+//             console.log("Success!");
+//         })
+//     }
+// }
+
 // Function to begin inquirer prompts when user activates application
 inquirer
     .prompt(
@@ -179,23 +250,3 @@ inquirer
         employees.push(newManager);
         nextRole();
     })
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
