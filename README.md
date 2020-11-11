@@ -8,7 +8,7 @@
 
 Keep your team's information handy and organized using this easy-to-use Software Engineering Team Generator!
 
-<!-- ![Team Sample Screenshot](assets/teampage_sample.png) -->
+![Team Sample Screenshot](assets/teampage_sample.png)
 
 ## Table of Contents
 
@@ -56,8 +56,9 @@ Once you're finished, you'll find your generated HTML page and its accompanying 
 
 ## Demo
 
-<!-- ![View the demo](./assets/README_demo2.gif)
-[Click to view full demo](https://www.youtube.com/watch?v=Minem3tS36w) -->
+![View the demo](./assets/teampage_demo.gif)
+
+[Click to view full demo](https://youtu.be/CNFqOki0PWo)
 
 ## Method
 
@@ -93,7 +94,7 @@ To further this project, I would like to add a couple features to the inquirer p
 ## Links
 
 - [Project Repository](https://github.com/ncmarsh/software_engineering_team_generator)
-<!-- - [View the walkthrough](#Demo) -->
+- [View the demo](https://youtu.be/CNFqOki0PWo)
 
 ## Contact
 
