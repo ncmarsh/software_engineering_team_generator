@@ -4,7 +4,6 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-const mkdirp = require("mkdirp");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
@@ -200,14 +199,8 @@ function nextRole() {
     })
 }
 
-// Function to write to html file
-function createHTMLFile(data) {     
-    mkdirp(OUTPUT_DIR, function(err) {
-        if (err) {
-            return console.log(err);
-        }
-    })
-
+// Function to create the user's generated folder and files
+function createUserFile(data) {
     fs.writeFile(outputPath, render(data), function(err) {
         if (err) {
             return console.log(err);
@@ -223,44 +216,20 @@ function createHTMLFile(data) {
     })
 }
 
-// Alternate function to write html file
-// function createHTMLFile(data) {
-//     if (fs.existsSync(OUTPUT_DIR)) {
-//         fs.writeFile(outputPath, render(data), function(err) {
-//             if (err) {
-//                 return console.log(err);
-//             }
-//             console.log("Success!");
-//         })
-
-//         fs.copyFile("./templates/style.css", cssPath, function(err) {
-//             if (err) {
-//                 return console.log(err);
-//             }
-//             console.log("Success!");
-//         })
-//     } else {
-//         fs.mkdir(OUTPUT_DIR, function(err) {
-//             if (err) {
-//                 return console.log(err);
-//             }
-//         })
+// Function to generate the HTML file from the templates
+function createHTMLFile(data) {
+    if (fs.existsSync(OUTPUT_DIR)) {
+        createUserFile(data);
+    } else {
+        fs.mkdir(OUTPUT_DIR, function(err) {
+            if (err) {
+                return console.log(err);
+            }
+        })
     
-//         fs.writeFile(outputPath, render(data), function(err) {
-//             if (err) {
-//                 return console.log(err);
-//             }
-//             console.log("Success!");
-//         })
-
-//         fs.copyFile("./templates/style.css", cssPath, function(err) {
-//             if (err) {
-//                 return console.log(err);
-//             }
-//             console.log("Success!");
-//         })
-//     }
-// }
+        createUserFile(data);
+    }
+}
 
 // Function to begin inquirer prompts when user activates application
 inquirer
