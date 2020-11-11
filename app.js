@@ -8,6 +8,7 @@ const mkdirp = require("mkdirp");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
+const cssPath = path.join(OUTPUT_DIR, "style.css");
 
 const render = require("./lib/htmlRenderer");
 const { run } = require("jest");
@@ -213,12 +214,26 @@ function createHTMLFile(data) {
         }
         console.log("Success!");
     })
+
+    fs.copyFile("./templates/style.css", cssPath, function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("Success!");
+    })
 }
 
 // Alternate function to write html file
 // function createHTMLFile(data) {
 //     if (fs.existsSync(OUTPUT_DIR)) {
 //         fs.writeFile(outputPath, render(data), function(err) {
+//             if (err) {
+//                 return console.log(err);
+//             }
+//             console.log("Success!");
+//         })
+
+//         fs.copyFile("./templates/style.css", cssPath, function(err) {
 //             if (err) {
 //                 return console.log(err);
 //             }
@@ -232,6 +247,13 @@ function createHTMLFile(data) {
 //         })
     
 //         fs.writeFile(outputPath, render(data), function(err) {
+//             if (err) {
+//                 return console.log(err);
+//             }
+//             console.log("Success!");
+//         })
+
+//         fs.copyFile("./templates/style.css", cssPath, function(err) {
 //             if (err) {
 //                 return console.log(err);
 //             }
